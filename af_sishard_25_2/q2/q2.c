@@ -13,6 +13,10 @@
 
 int main()
 {
+    int maior_elemento;
+    int posicao = 0;
+    int posicao_maior;
+    
     int n, k, status;
 
     //quantidade de processos
@@ -33,18 +37,30 @@ int main()
     fflush(stdout);
 
     // Implemente aqui a criacao dos processos filhos
-
-
-
-    printf("Processo pai esperando os filhos finalizarem...\n");
-    fflush(stdout);
-    // Implemente a parte do pai esperando o retorno dos processos filhos
-
+    for (int i=0; i < k; i++) {
+        
+        pid_t pid = fork();
+        
+        if (pid == 0) {
+            sleep(5);
+            if(A[posicao] > maior_elemento){
+                maior_elemento = A[posicao];
+                posicao_maior = posicao;
+            } 
+        }
+        
+        waitpid(pid, &status, 0);
+        
+        posicao++;
+        if(posicao > n){
+            break;
+        }
+    }
 
 
     // coloque as respostas obtida pelo processo pai, substituindo o primeiro `%d` pela ordem do filho 
     // e o segundo `%d` pelo maior elemento no vetor.
-    printf("P%d Maior=%d\n", 0, 0);
+    printf("P%d Maior=%d\n", posicao_maior, maior_elemento);
 
     free(A);
 
