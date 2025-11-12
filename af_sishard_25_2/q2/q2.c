@@ -36,6 +36,8 @@ int main()
     printf("Processo pai cria os K=%d Processos Filhos para analisar o vetor com N=%d posicoes do Vetor A[]...\n",k,n);
     fflush(stdout);
 
+    int R = n/k;
+
     // Implemente aqui a criacao dos processos filhos
     for (int i=0; i < k; i++) {
         
@@ -43,18 +45,20 @@ int main()
         
         if (pid == 0) {
             sleep(5);
+        }
+
+        waitpid(pid, &status, 0);
+
+        // cada filho deve checar R posicoes da lista
+        for (int j=0; j < R; j++){
             if(A[posicao] > maior_elemento){
                 maior_elemento = A[posicao];
                 posicao_maior = posicao;
+            posicao++;
             } 
         }
+
         
-        waitpid(pid, &status, 0);
-        
-        posicao++;
-        if(posicao > n){
-            break;
-        }
     }
 
 
